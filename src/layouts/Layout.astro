@@ -1,22 +1,37 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import { ViewTransitions } from 'astro:transitions'
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+const { frontmatter, title } = Astro.props
+---
+
+<html lang='en'>
+  <head>
+    <title>{title}</title>
+
+    <meta name='description' content={frontmatter?.description ? frontmatter.description : 'My awesome blog'} />
+    <meta charset='utf-8' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='viewport' content='width=device-width' />
+    <meta name='generator' content={Astro.generator} />
+    <style is:global>
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    </style>
+    <ViewTransitions />
+  </head>
+  <body class='p-5'>
+    {
+      Astro.url.pathname !== '/' && (
+        <p class='py-4'>
+          <a class='underline' href={'/'}>
+            ◀︎ Back to the homepage
+          </a>
+        </p>
+      )
+    }
+    {frontmatter?.title && <h1>{frontmatter.title}</h1>}
+    <slot />
+  </body>
+</html>
